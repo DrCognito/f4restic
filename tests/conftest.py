@@ -1,10 +1,23 @@
-# -*- coding: utf-8 -*-
-"""
-    Dummy conftest.py for f4restic.
+import pytest
+import pyfakefs.pytest_plugin
 
-    If you don't know what this is for, just leave it empty.
-    Read more about conftest.py under:
-    https://pytest.org/latest/plugins.html
-"""
 
-# import pytest
+file_list = [
+    "/var/data/xx1.txt",
+    "/var/data/xx1/xx2.txt",
+    "/xx1.txt",
+    "/var/file1",
+    "/var/file2.t",
+    "/var/file3.tx",
+    "/var/file4.txt",
+    "/directory1/.hidden",
+    "/.hidden",
+]
+
+
+@pytest.fixture()
+def test_fs(fs):
+    for f in file_list:
+        fs.create_file(f)
+
+    yield fs

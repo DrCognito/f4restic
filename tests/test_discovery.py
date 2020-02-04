@@ -1,18 +1,8 @@
 import f4restic.file.discovery as f4rdisco
 import pathlib
-import pyfakefs.pytest_plugin
 
 
-def make_some_files(fs):
-    fs.create_file("/var/data/xx1.txt")
-    fs.create_file("/var/data/xx1/xx2.txt")
-    fs.create_file("/xx1.txt")
-
-    return fs
-
-
-def test_discovery_basic(fs):
-    fs = make_some_files(fs)
+def test_discovery_basic(test_fs):
     directory = pathlib.Path("/")
     pattern = "xx1.txt"
     recursive = True
