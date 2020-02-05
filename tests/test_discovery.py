@@ -2,7 +2,7 @@ import f4restic.file.discovery as f4rdisco
 import pathlib
 
 
-def test_discovery_basic(test_fs):
+def test_discovery_basic(fake_fs):
     directory = pathlib.Path("/")
     pattern = "xx1.txt"
     recursive = True

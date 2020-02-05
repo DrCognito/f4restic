@@ -1,7 +1,7 @@
 import os
 import pathlib
 
-# import pyfakefs.pytest_plugin
+import pyfakefs.pytest_plugin
 
 
 def test_makefs_makefile(fs):
@@ -16,6 +16,6 @@ def test_makefs_pathlib(fs):
     assert test.exists()
 
 
-def test_makefs_conftest_fixture(test_fs):
+def test_makefs_conftest_fixture(fake_fs):
     test = pathlib.Path("/var/data/xx1.txt")
     assert test.exists()

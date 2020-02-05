@@ -1,5 +1,6 @@
 import pathlib
-from typing import Set, Tuple
+import f4restic.file.discovery as discovery
+from typing import Set, Tuple, List
 
 
 class FileGroup:
@@ -15,3 +16,10 @@ class FileGroup:
             self.filters = filters
         else:
             self.filters = set()
+
+    def get_include_list(self) -> List[str]:
+        out = []
+        for path, pattern, recursive in self.filters:
+            out.extend(discovery.filtered_files(path, pattern, recursive))
+
+        return out

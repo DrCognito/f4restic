@@ -12,11 +12,12 @@ file_list = [
     "/var/file4.txt",
     "/directory1/.hidden",
     "/.hidden",
+    "/emptydir/",
 ]
 
 
 @pytest.fixture()
-def test_fs(fs):
+def fake_fs(fs):
     for f in file_list:
         fs.create_file(f)
 
