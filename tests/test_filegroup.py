@@ -75,9 +75,7 @@ def test_filegroup_include_directory(fake_fs):
     directory = (pathlib.Path("/var/data/"), "*", False)
     test_group = f4rgroup.FileGroup(filters={directory,})
     assert str(pathlib.Path("/var/data/xx1.txt")) in test_group.get_file_list()
-    assert (
-        str(pathlib.Path("/var/data/xx1/xx2.txt")) not in test_group.get_file_list()
-    )
+    assert str(pathlib.Path("/var/data/xx1/xx2.txt")) not in test_group.get_file_list()
 
 
 def test_filegroup_include_empty_directory(fake_fs):
