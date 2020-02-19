@@ -111,3 +111,15 @@ def test_filegroup_include_2filt(fake_fs):
     assert str(pathlib.Path("/var/file2.t")) in files
     assert str(pathlib.Path("/var/file3.tx")) in files
     assert str(pathlib.Path("/var/file4.txt")) not in files
+
+
+def test_special_wildcard(fake_fs):
+    filt1 = (pathlib.Path("/"), "foo/**/bar", True)
+
+    test_group = f4rgroup.FileGroup(filters={filt1,})
+    files = test_group.get_file_list()
+    print(files)
+
+    assert str(pathlib.Path("/dir1/foo/dir2/bar/file")) in files
+    assert str(pathlib.Path("/foo/bar/file")) in files
+    assert str(pathlib.Path("/tmp/foo/bar")) in files

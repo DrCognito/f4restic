@@ -13,6 +13,9 @@ file_list = [
     "/directory1/.hidden",
     "/.hidden",
     "/emptydir/",
+    "/dir1/foo/dir2/bar/file",
+    "/foo/bar/file",
+    "/tmp/foo/bar",
 ]
 
 
