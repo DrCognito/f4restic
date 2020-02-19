@@ -17,7 +17,7 @@ class FileGroup:
         else:
             self.filters = set()
 
-    def get_include_list(self) -> List[str]:
+    def get_file_list(self) -> List[str]:
         out = []
         for path, pattern, recursive in self.filters:
             out.extend(discovery.filtered_files(path, pattern, recursive))
