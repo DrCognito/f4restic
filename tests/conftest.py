@@ -19,6 +19,10 @@ file_list = [
 ]
 
 
+def pytest_configure():
+    pytest.fake_file_list = file_list
+
+
 @pytest.fixture()
 def fake_fs(fs):
     for f in file_list:
