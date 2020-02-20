@@ -6,6 +6,7 @@ from typing import Set, Tuple, List
 class FileGroup:
     def __init__(
         self, *, includes: Set[Tuple[pathlib.Path, str, bool]] = None,
+        excludes: Set[Tuple[pathlib.Path, str, bool]] = None,
     ):
         """[summary]
 
@@ -17,9 +18,14 @@ class FileGroup:
         else:
             self.includes = set()
 
-    def get_file_list(self) -> List[str]:
+        if excludes:
+            self.excludes = excludes
+        else:
+            self.excludes = set()
+
+    def get_file_list(self) -> Set[str]:
         out = []
         for path, pattern, recursive in self.includes:
             out.extend(discovery.filtered_files(path, pattern, recursive))
 
-        return out
+        return set(out)
