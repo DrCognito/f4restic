@@ -5,21 +5,21 @@ from typing import Set, Tuple, List
 
 class FileGroup:
     def __init__(
-        self, *, filters: Set[Tuple[pathlib.Path, str, bool]] = None,
+        self, *, includes: Set[Tuple[pathlib.Path, str, bool]] = None,
     ):
         """[summary]
 
-        :param filters: [description], defaults to None
-        :type filters: Set[Tuple(pathlib.Path, str, bool)], optional
+        :param includes: List of glob filters to be applied sequentially, defaults to None
+        :type includes: Set[Tuple(pathlib.Path, str, bool)], optional
         """
-        if filters:
-            self.filters = filters
+        if includes:
+            self.includes = includes
         else:
-            self.filters = set()
+            self.includes = set()
 
     def get_file_list(self) -> List[str]:
         out = []
-        for path, pattern, recursive in self.filters:
+        for path, pattern, recursive in self.includes:
             out.extend(discovery.filtered_files(path, pattern, recursive))
 
         return out
