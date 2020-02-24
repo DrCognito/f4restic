@@ -1,6 +1,8 @@
 import f4restic.file.filegroup as f4rgroup
 import pathlib
 import typing as typ
+import fnmatch
+import pytest
 
 
 def test_filegroup_filter_basic1():
@@ -27,7 +29,7 @@ def test_filegroup_filter_basic2(fake_fs):
 def test_filegroup_include_empty():
 
     test_group = f4rgroup.FileGroup()
-    assert isinstance(test_group.get_file_list(), typ.List)
+    assert isinstance(test_group.get_file_list(), typ.Set)
 
 
 def test_filegroup_include_real():
@@ -36,7 +38,7 @@ def test_filegroup_include_real():
     test_group = f4rgroup.FileGroup(includes={single,})
     file_list = test_group.get_file_list()
 
-    assert isinstance(file_list, typ.List)
+    assert isinstance(file_list, typ.Set)
     assert len(file_list) > 0
 
 
@@ -123,4 +125,38 @@ def test_special_wildcard(fake_fs):
     assert str(pathlib.Path("/tmp/foo/bar")) in files
 
 
-# def test_filegroup_exclude_all(fake_fs):
+def test_filegroup_exclude_all(fake_fs):
+    filt1 = (pathlib.Path("/"), "*.t", True)
+    filt2 = (pathlib.Path("/arr/"), "*.txt", False)
+
+    test_group = f4rgroup.FileGroup(excludes={filt1,})
+
+    assert filt1 in test_group.excludes
+
+    test_group.excludes.add(filt2)
+
+    assert filt2 in test_group.excludes
+
+
+def test_filegroup_exclude_txt(fake_fs):
+    file_match = "*.txt"
+    filt1 = (pathlib.Path("/"), "*", True)
+    filt2 = (pathlib.Path("/"), file_match, True)
+
+    test_group = f4rgroup.FileGroup(includes={filt1,})
+
+    files_removed = set()
+    for f in fnmatch.filter(pytest.fake_file_list, file_match):
+        files_removed.add(str(pathlib.Path(f)))
+
+    files = test_group.get_file_list()
+    # Make sure the files actually exist first
+    assert files.issuperset(files_removed)
+
+    test_group.excludes.add(filt2)
+    # Re-run with the exclusion filter.
+    files = test_group.get_file_list()
+
+    assert len(files_removed) > 0
+    assert len(files) > 0
+    assert files.isdisjoint(files_removed)
