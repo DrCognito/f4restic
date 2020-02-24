@@ -4,7 +4,7 @@ from typing import List
 
 def filtered_files(
     base_dir: pathlib.Path, pattern: str, recursive: bool
-) -> List[pathlib.Path]:
+) -> List[str]:
 
     glob = pathlib.Path.rglob if recursive else pathlib.Path.glob
 
