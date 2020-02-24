@@ -2,9 +2,7 @@ import pathlib
 from typing import List
 
 
-def filtered_files(
-    base_dir: pathlib.Path, pattern: str, recursive: bool
-) -> List[str]:
+def filtered_files(base_dir: pathlib.Path, pattern: str, recursive: bool) -> List[str]:
 
     glob = pathlib.Path.rglob if recursive else pathlib.Path.glob
 

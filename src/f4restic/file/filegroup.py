@@ -5,7 +5,9 @@ from typing import Set, Tuple, List
 
 class FileGroup:
     def __init__(
-        self, *, includes: Set[Tuple[pathlib.Path, str, bool]] = None,
+        self,
+        *,
+        includes: Set[Tuple[pathlib.Path, str, bool]] = None,
         excludes: Set[Tuple[pathlib.Path, str, bool]] = None,
     ):
         """[summary]
@@ -28,4 +30,15 @@ class FileGroup:
         for path, pattern, recursive in self.includes:
             out.extend(discovery.filtered_files(path, pattern, recursive))
 
-        return set(out)
+        out = set(out)
+
+        # Build an exclude list with the same methods.
+        # This is potentially slow as of course we hit the fs twice and then subtract.
+        # This minimally allows for code reuse with filtered_files
+        excl = []
+        for path, pattern, recursive in self.excludes:
+            excl.extend(discovery.filtered_files(path, pattern, recursive))
+        excl = set(excl)
+
+        out.difference_update(excl)
+        return out
